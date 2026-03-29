@@ -1,86 +1,6 @@
 import { useState } from 'react'
 import './App.css'
 
-const mockResults = {
-  utility: {
-    name: 'Cincinnati Water Works',
-    county: 'Hamilton County, OH',
-    population: '~400,000',
-    pwsid: 'OH1290069',
-  },
-  metrics: {
-    lead: {
-      status: 'warn',
-      label: 'Lead Risk',
-      value: 'Elevated concern',
-      badge: 'Moderate risk',
-      summary: 'Building constructed ~1974. Homes built before 1986 may have lead pipes or solder. No active utility violations found.',
-      data: [
-        { key: 'Utility violations (10 yr)', val: '0 lead violations' },
-        { key: 'Building age proxy', val: 'Pre-1986 flag' },
-        { key: '90th percentile level', val: '8 ppb (action level: 15 ppb)' },
-      ],
-      source: 'EPA ECHO · SDWIS violation record OH1290069',
-      sourceUrl: 'https://echo.epa.gov',
-      updated: 'Updated Jan 2025',
-      explainer: 'Lead enters water through old pipes inside buildings, not from the utility. Your area has no current violations but your building age is a risk factor.',
-      recommendation: 'Run cold tap 2 min before drinking. Consider a NSF/ANSI 53-certified lead filter.',
-    },
-    pfas: {
-      status: 'danger',
-      label: 'PFAS Contaminants',
-      value: '4 compounds detected',
-      badge: 'Above health limit',
-      summary: 'PFAS levels detected in your water system exceed EPA health advisory limits for PFOA and PFOS.',
-      data: [
-        { key: 'PFOA detected', val: '6.2 ppt (limit: 4 ppt)' },
-        { key: 'PFOS detected', val: '5.1 ppt (limit: 4 ppt)' },
-        { key: 'PFNA detected', val: '2.1 ppt' },
-        { key: 'PFHxS detected', val: '1.8 ppt' },
-      ],
-      source: 'EPA UCMR 5 dataset · System OH1290069',
-      sourceUrl: 'https://www.epa.gov/dwucmr',
-      updated: 'Updated Q3 2024',
-      explainer: 'PFAS are synthetic chemicals that do not break down. Long-term exposure has been linked to immune and hormonal effects.',
-      recommendation: 'A reverse osmosis or activated carbon block filter is the most effective solution for PFAS removal.',
-    },
-    hardness: {
-      status: 'info',
-      label: 'Water Hardness',
-      value: '145 mg/L (CaCO3)',
-      badge: 'Hard',
-      summary: 'Classified as hard water. Not a health risk, but can cause scale buildup on fixtures and appliances.',
-      data: [
-        { key: 'Calcium (Ca)', val: '42 mg/L' },
-        { key: 'Magnesium (Mg)', val: '14 mg/L' },
-        { key: 'Hardness class', val: 'Hard (120 to 180 mg/L)' },
-      ],
-      source: 'USGS Water Quality Portal · Station USGS-03255000',
-      sourceUrl: 'https://www.waterqualitydata.us',
-      updated: 'Updated 2023',
-      explainer: 'Hard water is safe to drink. The main downsides are mineral buildup on faucets and appliances, reduced soap lathering, and sometimes dry skin or hair.',
-      recommendation: 'A whole-home water softener addresses scale buildup. Not medically necessary but extends appliance lifespan.',
-    },
-    violations: {
-      status: 'good',
-      label: 'Utility Violations',
-      value: '0 active violations',
-      badge: 'No active violations',
-      summary: 'Cincinnati Water Works has no current enforcement actions. Last resolved violation was in 2019.',
-      data: [
-        { key: 'Active violations', val: '0' },
-        { key: 'Violations (10 yr)', val: '2 resolved' },
-        { key: 'Last violation', val: '2019 - Resolved' },
-      ],
-      source: 'EPA ECHO · Enforcement history OH1290069',
-      sourceUrl: 'https://echo.epa.gov',
-      updated: 'Updated Jan 2025',
-      explainer: 'Utility violations indicate when a water system has broken federal Safe Drinking Water Act rules. No active violations means your utility is currently in compliance.',
-      recommendation: null,
-    },
-  },
-}
-
 const statusColors = {
   warn:   { border: '#EF9F27', badgeBg: '#FAEEDA', badgeColor: '#633806' },
   danger: { border: '#E24B4A', badgeBg: '#FCEBEB', badgeColor: '#501313' },
@@ -88,12 +8,12 @@ const statusColors = {
   info:   { border: '#378ADD', badgeBg: '#E6F1FB', badgeColor: '#0C447C' },
 }
 
-function MetricCard({ metric }) {
+function MetricCard({ metric, extra }) {
   const colors = statusColors[metric.status]
   return (
     <div className="metric-card" style={{ borderLeft: '3px solid ' + colors.border }}>
       <div className="metric-top">
-        <div className="metric-label">{metric.label}</div>
+        <div className="metric-label" style={{ color: colors.border }}>{metric.label}</div>
         <span className="metric-badge" style={{ background: colors.badgeBg, color: colors.badgeColor }}>
           {metric.badge}
         </span>
@@ -112,7 +32,7 @@ function MetricCard({ metric }) {
       </table>
       <div className="metric-footer">
         <a className="source-link" href={metric.sourceUrl} target="_blank" rel="noreferrer">
-          ↗ {metric.sourceLabel || metric.source}
+          {metric.sourceLabel || metric.source}
         </a>
         <span className="last-updated">{metric.updated}</span>
       </div>
@@ -125,6 +45,7 @@ function MetricCard({ metric }) {
           </div>
         )}
       </div>
+      {extra}
     </div>
   )
 }
@@ -134,12 +55,16 @@ function App() {
   const [results, setResults] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [showPwsInfo, setShowPwsInfo] = useState(false)
+  const [showLeadInfo, setShowLeadInfo] = useState(false)
 
   const handleCheck = async () => {
     if (!address.trim()) return
     setLoading(true)
     setResults(null)
     setError(null)
+    setShowPwsInfo(false)
+    setShowLeadInfo(false)
 
     try {
       const geoRes = await fetch(`/api/geocode?address=${encodeURIComponent(address)}`)
@@ -161,7 +86,7 @@ function App() {
       const violData = await violRes.json()
       const hardData = await hardRes.json()
 
-      const buildingYear = null
+      const leadViolCount = violData.recentViolations?.filter(v => v.contaminantCode === '5000').length || 0
 
       setResults({
         utility: {
@@ -173,22 +98,26 @@ function App() {
         },
         metrics: {
           lead: {
-            status: 'warn',
+            status: leadViolCount > 0 ? 'danger' : 'good',
             label: 'Lead Risk',
-            value: 'Potential concern',
-            badge: 'Check building age',
-            summary: 'Lead risk depends on your building age and internal plumbing. Homes built before 1986 may have lead pipes or solder.',
+            value: leadViolCount > 0 ? 'Violations on record' : 'No utility violations found',
+            badge: leadViolCount > 0 ? 'Action recommended' : 'Utility compliant',
+            summary: leadViolCount > 0
+              ? 'Your water utility has had lead-related violations on record. Contact your utility directly for current status.'
+              : 'Your water utility has no lead violations on record in the EPA database. This reflects utility-level compliance only.',
             data: [
-              { key: 'Utility lead violations (10 yr)', val: violData.recentViolations?.filter(v => v.contaminantCode === '5000').length > 0 ? 'Violations found' : 'None on record' },
-              { key: 'Building age proxy', val: 'Enter build year for assessment' },
-              { key: 'EPA action level', val: '15 ppb' },
+              { key: 'Lead violations on record', val: String(leadViolCount) },
+              { key: 'Total utility violations', val: String(violData.totalViolations) },
+              { key: 'EPA lead action level', val: '15 ppb' },
             ],
-            source: `EPA ECHO · Detailed Facility Report ${wsData.pwsid}`,
-            sourceUrl: `https://echo.epa.gov/detailed-facility-report?fid=${wsData.pwsid}&sys=SDWIS`,
+            source: 'EPA ECHO · Detailed Facility Report ' + wsData.pwsid,
+            sourceUrl: 'https://echo.epa.gov/detailed-facility-report?fid=' + wsData.pwsid + '&sys=SDWIS',
             sourceLabel: 'View full record on EPA ECHO',
             updated: 'Updated quarterly',
-            explainer: 'Lead enters water through old pipes inside buildings, not from the utility. Homes built before 1986 are at higher risk.',
-            recommendation: 'Run cold tap 2 min before drinking. Consider a NSF/ANSI 53-certified lead filter.',
+            explainer: 'This reflects whether your water utility has violated EPA lead standards. It does not assess lead risk from your building\'s internal plumbing.',
+            recommendation: leadViolCount > 0
+              ? 'Contact your utility directly. Consider running cold tap for 2 minutes before drinking and using a NSF/ANSI 53-certified lead filter.'
+              : 'No utility-level action needed. See below for building-specific considerations.',
           },
           pfas: {
             status: 'info',
@@ -211,13 +140,13 @@ function App() {
           hardness: {
             status: hardData.hardness > 180 ? 'warn' : hardData.hardness > 120 ? 'info' : 'good',
             label: 'Water Hardness',
-            value: hardData.hardness ? `${hardData.hardness} mg/L (CaCO3)` : 'Data unavailable',
+            value: hardData.hardness ? hardData.hardness + ' mg/L (CaCO3)' : 'Data unavailable',
             badge: hardData.classification || 'Unknown',
             summary: hardData.hardness
-              ? `${hardData.countyName || 'Your area'} water is classified as ${hardData.classification?.toLowerCase()}. ${hardData.hardness > 120 ? 'May cause scale buildup on fixtures and appliances.' : 'No significant hardness issues expected.'}`
+              ? (hardData.countyName || 'Your area') + ' water is classified as ' + hardData.classification?.toLowerCase() + '. ' + (hardData.hardness > 120 ? 'May cause scale buildup on fixtures and appliances.' : 'No significant hardness issues expected.')
               : 'Hardness data not available for this area.',
             data: [
-              { key: 'Hardness level', val: hardData.hardness ? `${hardData.hardness} mg/L` : 'N/A' },
+              { key: 'Hardness level', val: hardData.hardness ? hardData.hardness + ' mg/L' : 'N/A' },
               { key: 'Classification', val: hardData.classification || 'N/A' },
               { key: 'Data scope', val: hardData.scope === 'county' ? 'County-level data' : 'State average' },
             ],
@@ -234,19 +163,19 @@ function App() {
             status: violData.activeViolations > 0 ? 'danger' : 'good',
             label: 'Utility Violations',
             value: violData.activeViolations > 0
-              ? `${violData.activeViolations} active violation${violData.activeViolations > 1 ? 's' : ''}`
+              ? violData.activeViolations + ' active violation' + (violData.activeViolations > 1 ? 's' : '')
               : '0 active violations',
             badge: violData.activeViolations > 0 ? 'Action required' : 'No active violations',
             summary: violData.activeViolations > 0
-              ? `Your water utility has ${violData.activeViolations} unresolved violation${violData.activeViolations > 1 ? 's' : ''}. ${violData.healthBasedViolations > 0 ? `${violData.healthBasedViolations} are health-based.` : ''}`
-              : `${wsData.name} has no current enforcement actions. ${violData.totalViolations > 0 ? `${violData.totalViolations} historical violations are all resolved.` : 'Clean compliance record.'}`,
+              ? 'Your water utility has ' + violData.activeViolations + ' unresolved violation' + (violData.activeViolations > 1 ? 's' : '') + '. ' + (violData.healthBasedViolations > 0 ? violData.healthBasedViolations + ' are health-based.' : '')
+              : wsData.name + ' has no current enforcement actions. ' + (violData.totalViolations > 0 ? violData.totalViolations + ' historical violations are all resolved.' : 'Clean compliance record.'),
             data: [
               { key: 'Active violations', val: String(violData.activeViolations) },
               { key: 'Health-based violations', val: String(violData.healthBasedViolations) },
               { key: 'Total violations on record', val: String(violData.totalViolations) },
             ],
-            source: `EPA ECHO · Enforcement history ${wsData.pwsid}`,
-            sourceUrl: `https://echo.epa.gov/detailed-facility-report?fid=${wsData.pwsid}&sys=SDWIS`,
+            source: 'EPA ECHO · Enforcement history ' + wsData.pwsid,
+            sourceUrl: 'https://echo.epa.gov/detailed-facility-report?fid=' + wsData.pwsid + '&sys=SDWIS',
             sourceLabel: 'View enforcement history on EPA ECHO',
             updated: 'Updated quarterly',
             explainer: 'Utility violations indicate when a water system has broken federal Safe Drinking Water Act rules. Active violations mean the issue is unresolved.',
@@ -292,7 +221,7 @@ function App() {
         </button>
       </div>
 
-{error && (
+      {error && (
         <div className="error-box">
           {error}
         </div>
@@ -302,28 +231,74 @@ function App() {
         <div className="results">
           <div className="utility-bar">
             <div>
+              <div className="utility-meta">Your address is served by</div>
               <div className="utility-name">{results.utility.name}</div>
               <div className="utility-meta">
                 {results.utility.county} · Serves {results.utility.population} people
               </div>
             </div>
-            <div className="utility-id">{results.utility.pwsid}</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <div className="utility-id">
+                <span className="utility-id-label">PWS ID: </span>
+                {results.utility.pwsid}
+              </div>
+              <div className="pwsid-tooltip-wrap" onClick={() => setShowPwsInfo(!showPwsInfo)}>
+                <div className="pwsid-help">?</div>
+              </div>
+            </div>
           </div>
+
+          {showPwsInfo && (
+            <div className="pwsid-explainer">
+              <div className="pwsid-explainer-title">What is a PWS ID?</div>
+              <p>A Public Water System ID (PWS ID) is a unique identifier assigned by the EPA to every regulated water utility in the United States. It consists of a two-letter state code followed by seven digits.</p>
+              <p>Your PWS ID is the key that links your address to all federal water quality records, including violation history, contaminant testing, and enforcement actions held in the EPA Safe Drinking Water Information System (SDWIS).</p>
+              <a href="https://www.epa.gov/ground-water-and-drinking-water/safe-drinking-water-information-system-sdwis-federal-reporting" target="_blank" rel="noreferrer" className="pwsid-explainer-link">Learn more on EPA.gov</a>
+              <button className="pwsid-explainer-close" onClick={() => setShowPwsInfo(false)}>Close</button>
+            </div>
+          )}
 
           <div className="section-label">Water quality indicators</div>
 
           {Object.values(results.metrics).map((metric) => (
-            <MetricCard key={metric.label} metric={metric} />
+            <MetricCard
+              key={metric.label}
+              metric={metric}
+              extra={metric.label === 'Lead Risk' ? (
+                <div>
+                  <button
+                    className="lead-more-btn"
+                    onClick={() => setShowLeadInfo(!showLeadInfo)}
+                  >
+                    {showLeadInfo ? 'Hide' : 'Can you be more specific about my building?'}
+                  </button>
+                  {showLeadInfo && (
+                    <div className="lead-info-box">
+                      <div className="lead-info-title">Why we cannot assess your specific building:</div>
+                      <p>The data above reflects your water utility compliance record: whether the utility that supplies your water has violated EPA lead standards. This is federally reported data.</p>
+                      <p>However, the lead risk in your specific home also depends on factors we do not have access to:</p>
+                      <ul>
+                        <li><strong>Building age:</strong> Homes built before 1986 may have lead pipes or lead solder. Lead was banned from plumbing in 1986.</li>
+                        <li><strong>Service line material:</strong> The pipe connecting your home to the water main may be lead. The EPA required utilities to inventory these by October 2024, but this data is not yet available in a national searchable database.</li>
+                        <li><strong>Internal plumbing:</strong> Faucets and fixtures in older homes may contain lead components not captured in any public database.</li>
+                      </ul>
+                      <p>If your home was built before 1986, or if you are concerned about lead, the EPA recommends using a certified filter regardless of utility compliance status.</p>
+                      <a href="https://www.epa.gov/ground-water-and-drinking-water/basic-information-about-lead-drinking-water" target="_blank" rel="noreferrer" className="lead-info-link">
+                        Learn more about lead in drinking water on EPA.gov
+                      </a>
+                    </div>
+                  )}
+                </div>
+              ) : null}
+            />
           ))}
 
-          <div className="ccr-row" onClick={() => window.open(`https://ofmpub.epa.gov/apex/safewater/f?p=136:102`, '_blank')} style={{cursor:'pointer'}}>
+          <div className="ccr-row" onClick={() => window.open('https://ofmpub.epa.gov/apex/safewater/f?p=136:102', '_blank')} style={{ cursor: 'pointer' }}>
             <div className="ccr-left">
               <div className="ccr-icon">📄</div>
               <div>
                 <div className="ccr-title">View Consumer Confidence Report</div>
-                <div className="ccr-sub">
-                  {results.utility.name} · 2024 Annual Water Quality Report
-                </div>
+                <div className="ccr-sub">{results.utility.name} · 2024 Annual Water Quality Report</div>
               </div>
             </div>
             <span className="ccr-arrow">↗</span>

@@ -139,10 +139,9 @@ body {
 }
 
 .metric-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #888;
+  font-size: 18px;
+  text-transform: none;
+  letter-spacing: 0;
   font-weight: 500;
 }
 
@@ -302,6 +301,90 @@ body {
   color: #501313;
   margin-bottom: 1rem;
   text-align: center;
+}
+
+.utility-id-label {
+  font-weight: 500;
+  color: #555;
+}
+
+.pwsid-help {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #e0e0dc;
+  color: #555;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.pwsid-help:hover {
+  background: #1D9E75;
+  color: #fff;
+}
+
+.pwsid-tooltip-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.pwsid-explainer {
+  background: #f0f7f4;
+  border: 0.5px solid #1D9E75;
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.25rem;
+  font-size: 13px;
+  color: #1a1a1a;
+  line-height: 1.6;
+}
+
+.pwsid-explainer-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.pwsid-explainer p {
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.pwsid-explainer-link {
+  display: inline-block;
+  font-size: 12px;
+  color: #1D9E75;
+  text-decoration: none;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.pwsid-explainer-link:hover {
+  text-decoration: underline;
+}
+
+.pwsid-explainer-close {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #888;
+  background: none;
+  border: 0.5px solid #ddd;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.pwsid-explainer-close:hover {
+  background: #f0f0ed;
 }
 
 .disclaimer {
