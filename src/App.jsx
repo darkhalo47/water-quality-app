@@ -8,7 +8,7 @@ const statusColors = {
   info:   { border: '#378ADD', badgeBg: '#E6F1FB', badgeColor: '#0C447C' },
 }
 
-function MetricCard({ metric, extra }) {
+function MetricCard({ metric, extra, showLeadRec, setShowLeadRec }) {
   const colors = statusColors[metric.status]
   return (
     <div className="metric-card" style={{ borderLeft: '3px solid ' + colors.border }}>
@@ -41,7 +41,58 @@ function MetricCard({ metric, extra }) {
         {metric.recommendation && (
           <div className="rec-box">
             <div className="rec-label">Recommendation</div>
-            <p>{metric.recommendation}</p>
+            <p>{metric.recommendation}
+              {metric.label === 'Lead Risk' && (
+                <button className="learn-more-btn" onClick={() => setShowLeadRec(!showLeadRec)}>
+                  {showLeadRec ? ' Hide' : ' Learn more'}
+                </button>
+              )}
+            </p>
+            {metric.label === 'Lead Risk' && showLeadRec && (
+              <div className="rec-detail-box">
+                <div className="rec-detail-title">EPA guidance on reducing lead exposure from drinking water</div>
+
+                <div className="rec-detail-section">
+                  <div className="rec-detail-heading">Flushing your tap</div>
+                  <p>The EPA recommends that when water has been sitting in pipes for several hours, you flush your tap for 30 seconds to 2 minutes before using water for drinking or cooking. The exact time depends on whether your home has a lead service line and how long it is. Contact your utility for specific guidance for your community.</p>
+                  <a href="https://www.epa.gov/ground-water-and-drinking-water/basic-information-about-lead-drinking-water" target="_blank" rel="noreferrer" className="rec-detail-link">
+                    EPA - Basic Information About Lead in Drinking Water
+                  </a>
+                </div>
+
+                <div className="rec-detail-section">
+                  <div className="rec-detail-heading">Use cold water only</div>
+                  <p>The EPA advises using only cold water from the tap for drinking, cooking, and making baby formula. Hot water is more likely to contain higher levels of lead. Boiling water does not remove lead.</p>
+                  <a href="https://www.epa.gov/ground-water-and-drinking-water/basic-information-about-lead-drinking-water" target="_blank" rel="noreferrer" className="rec-detail-link">
+                    EPA - Basic Information About Lead in Drinking Water
+                  </a>
+                </div>
+
+                <div className="rec-detail-section">
+                  <div className="rec-detail-heading">NSF/ANSI 53-certified filters</div>
+                  <p>The EPA recommends using a filter certified by an accredited third-party body to NSF/ANSI Standard 53 for lead reduction. This certification requires the filter to reduce lead to 5 ppb or less — one third of the EPA action level of 15 ppb. Look for NSF/ANSI 53 on the label and confirm that lead is specifically listed as a contaminant the filter reduces.</p>
+                  <a href="https://www.epa.gov/water-research/consumer-tool-identifying-point-use-and-pitcher-filters-certified-reduce-lead" target="_blank" rel="noreferrer" className="rec-detail-link">
+                    EPA - Consumer Tool for Identifying Filters Certified to Reduce Lead
+                  </a>
+                </div>
+
+                <div className="rec-detail-section">
+                  <div className="rec-detail-heading">Get your water tested</div>
+                  <p>The only way to know if your tap water contains lead is to have it tested by a certified laboratory. Many public water systems will test drinking water for residents upon request at no charge.</p>
+                  <a href="https://www.cdc.gov/lead-prevention/prevention/drinking-water.html" target="_blank" rel="noreferrer" className="rec-detail-link">
+                    CDC - About Lead in Drinking Water
+                  </a>
+                </div>
+
+                <div className="rec-detail-section">
+                  <div className="rec-detail-heading">Children and pregnant women</div>
+                  <p>The EPA and CDC agree there is no known safe level of lead in a child's blood. For households with infants, children, or pregnant women, the CDC recommends using bottled water or a certified filter for drinking, cooking, and preparing baby formula.</p>
+                  <a href="https://www.epa.gov/ground-water-and-drinking-water/basic-information-about-lead-drinking-water" target="_blank" rel="noreferrer" className="rec-detail-link">
+                    EPA - Basic Information About Lead in Drinking Water
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -57,6 +108,9 @@ function App() {
   const [error, setError] = useState(null)
   const [showPwsInfo, setShowPwsInfo] = useState(false)
   const [showLeadInfo, setShowLeadInfo] = useState(false)
+  const [showUtilityPicker, setShowUtilityPicker] = useState(false)
+  const [allSystems, setAllSystems] = useState([])
+  const [showLeadRec, setShowLeadRec] = useState(false)
 
   const handleCheck = async () => {
     if (!address.trim()) return
@@ -65,6 +119,7 @@ function App() {
     setError(null)
     setShowPwsInfo(false)
     setShowLeadInfo(false)
+    setShowUtilityPicker(false)
 
     try {
       const geoRes = await fetch(`/api/geocode?address=${encodeURIComponent(address)}`)
@@ -81,6 +136,7 @@ function App() {
 
       const wsData = await wsRes.json()
       if (wsData.error) throw new Error('No water system found for this address.')
+      setAllSystems(wsData.allSystems || [])  
 
       const violRes = await fetch(`/api/violations?pwsid=${wsData.pwsid}`)
       const violData = await violRes.json()
@@ -248,6 +304,95 @@ function App() {
             </div>
           </div>
 
+          <div className="utility-disclaimer">
+            This reflects the largest utility serving your area. Results may not apply to private wells or small community systems.
+            {allSystems.length > 1 && (
+              <button className="utility-picker-btn" onClick={() => setShowUtilityPicker(!showUtilityPicker)}>
+                {showUtilityPicker ? 'Hide' : 'Not your utility?'}
+              </button>
+            )}
+          </div>
+
+          {showUtilityPicker && (
+            <div className="utility-picker">
+              <div className="utility-picker-title">Other water systems in your area</div>
+              <div className="utility-picker-sub">Select the system that serves your address to reload results.</div>
+              {allSystems.map(s => (
+                <div
+                  key={s.pwsid}
+                  className={'utility-picker-row' + (s.pwsid === results.utility.pwsid ? ' active' : '')}
+                  onClick={async () => {
+                    if (s.pwsid === results.utility.pwsid) return
+                    setLoading(true)
+                    setShowUtilityPicker(false)
+                    try {
+                      const violRes = await fetch(`/api/violations?pwsid=${s.pwsid}`)
+                      const violData = await violRes.json()
+                      const leadViolCount = violData.recentViolations?.filter(v => v.contaminantCode === '5000').length || 0
+                      setResults(prev => ({
+                        ...prev,
+                        utility: {
+                          ...prev.utility,
+                          name: s.name,
+                          population: parseInt(s.population).toLocaleString(),
+                          pwsid: s.pwsid,
+                        },
+                        metrics: {
+                          ...prev.metrics,
+                          lead: {
+                            ...prev.metrics.lead,
+                            status: leadViolCount > 0 ? 'danger' : 'good',
+                            value: leadViolCount > 0 ? 'Violations on record' : 'No utility violations found',
+                            badge: leadViolCount > 0 ? 'Action recommended' : 'Utility compliant',
+                            summary: leadViolCount > 0
+                              ? 'Your water utility has had lead-related violations on record. Contact your utility directly for current status.'
+                              : 'Your water utility has no lead violations on record in the EPA database. This reflects utility-level compliance only.',
+                            data: [
+                              { key: 'Lead violations on record', val: String(leadViolCount) },
+                              { key: 'Total utility violations', val: String(violData.totalViolations) },
+                              { key: 'EPA lead action level', val: '15 ppb' },
+                            ],
+                            sourceUrl: 'https://echo.epa.gov/detailed-facility-report?fid=' + s.pwsid + '&sys=SDWIS',
+                            recommendation: leadViolCount > 0
+                              ? 'Contact your utility directly. Consider running cold tap for 2 minutes before drinking and using a NSF/ANSI 53-certified lead filter.'
+                              : 'No utility-level action needed. See below for building-specific considerations.',
+                          },
+                          violations: {
+                            ...prev.metrics.violations,
+                            status: violData.activeViolations > 0 ? 'danger' : 'good',
+                            value: violData.activeViolations > 0
+                              ? violData.activeViolations + ' active violation' + (violData.activeViolations > 1 ? 's' : '')
+                              : '0 active violations',
+                            badge: violData.activeViolations > 0 ? 'Action required' : 'No active violations',
+                            summary: violData.activeViolations > 0
+                              ? 'Your water utility has ' + violData.activeViolations + ' unresolved violation' + (violData.activeViolations > 1 ? 's' : '') + '.'
+                              : s.name + ' has no current enforcement actions.',
+                            data: [
+                              { key: 'Active violations', val: String(violData.activeViolations) },
+                              { key: 'Health-based violations', val: String(violData.healthBasedViolations) },
+                              { key: 'Total violations on record', val: String(violData.totalViolations) },
+                            ],
+                            sourceUrl: 'https://echo.epa.gov/detailed-facility-report?fid=' + s.pwsid + '&sys=SDWIS',
+                          },
+                        },
+                      }))
+                    } catch (err) {
+                      setError('Could not load data for that utility.')
+                    } finally {
+                      setLoading(false)
+                    }
+                  }}
+                >
+                  <div className="utility-picker-name">{s.name}</div>
+                  <div className="utility-picker-meta">
+                    {s.pwsid} · {parseInt(s.population).toLocaleString()} people
+                    {s.pwsid === results.utility.pwsid && <span className="utility-picker-current">Current</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
           {showPwsInfo && (
             <div className="pwsid-explainer">
               <div className="pwsid-explainer-title">What is a PWS ID?</div>
@@ -270,7 +415,7 @@ function App() {
                     className="lead-more-btn"
                     onClick={() => setShowLeadInfo(!showLeadInfo)}
                   >
-                    {showLeadInfo ? 'Hide' : 'Can you be more specific about my building?'}
+                    {showLeadInfo ? 'Hide' : 'Can you be more specific about the lead risk in my building?'}
                   </button>
                   {showLeadInfo && (
                     <div className="lead-info-box">
@@ -290,6 +435,8 @@ function App() {
                   )}
                 </div>
               ) : null}
+              showLeadRec={showLeadRec}
+              setShowLeadRec={setShowLeadRec}
             />
           ))}
 

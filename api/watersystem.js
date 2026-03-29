@@ -36,6 +36,16 @@ export default async function handler(req, res) {
       return pop > bestPop ? s : best
     }, list[0])
 
+    const allSystems = list.map(s => ({
+      pwsid: s.PWSID,
+      name: s.PWS_NAME,
+      city: s.CITY_NAME,
+      state: s.STATE_CODE,
+      population: parseInt(s.POPULATION_SERVED_COUNT || 0),
+      orgName: s.ORG_NAME,
+      zip: s.ZIP_CODE,
+    })).sort((a, b) => b.population - a.population)
+
     return res.status(200).json({
       pwsid: largest.PWSID,
       name: largest.PWS_NAME,
@@ -46,6 +56,7 @@ export default async function handler(req, res) {
       zip: largest.ZIP_CODE,
       sourceUrl: `https://echo.epa.gov/drinking-water/drinking-water-search/results?p_pwsid=${largest.PWSID}`,
       totalFound: list.length,
+      allSystems,
     })
   } catch (err) {
     return res.status(500).json({ error: 'Water system lookup failed', detail: err.message })
