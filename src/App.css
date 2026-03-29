@@ -551,6 +551,204 @@ body {
   text-decoration: underline;
 }
 
+.lead-more-btn {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-top: 0.5px solid #e8e8e4;
+  padding: 0.75rem 0 0;
+  margin-top: 0.75rem;
+  font-size: 13px;
+  color: #1D9E75;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+}
+
+.lead-more-btn:hover {
+  color: #178a64;
+}
+
+.lead-info-box {
+  margin-top: 0.75rem;
+  background: #fff;
+  border: 0.5px solid #e8e8e4;
+  border-radius: 8px;
+  padding: 0.875rem;
+}
+
+.lead-info-box p {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+.lead-info-box ul {
+  margin: 0.5rem 0 0.5rem 1.25rem;
+  text-align: left;
+}
+
+.lead-info-box ul li {
+  margin-bottom: 0.4rem;
+  font-size: 13px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.metric-subtitle {
+  font-size: 12px;
+  color: #888;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.hero-summary {
+  margin-top: 1.25rem;
+  background: #fff;
+  border: 0.5px solid #e8e8e4;
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  text-align: left;
+}
+
+.hero-summary p {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.hero-summary-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.hero-chip {
+  font-size: 11px;
+  font-weight: 500;
+  background: #f0f0ed;
+  color: #555;
+  padding: 3px 10px;
+  border-radius: 99px;
+  letter-spacing: 0.03em;
+}
+
+.glossary-btn {
+  width: 100%;
+  text-align: center;
+  background: none;
+  border: 0.5px solid #ddd;
+  border-radius: 12px;
+  padding: 0.875rem;
+  font-size: 13px;
+  color: #666;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  margin-top: 0.5rem;
+  transition: all 0.2s;
+}
+
+.glossary-btn:hover {
+  background: #f0f0ed;
+  color: #1a1a1a;
+}
+
+.glossary-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.glossary-panel {
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  padding: 1.5rem 1.25rem 2rem;
+  width: 100%;
+  max-width: 480px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.glossary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 0.5px solid #e8e8e4;
+}
+
+.glossary-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.glossary-close {
+  font-size: 13px;
+  color: #888;
+  background: none;
+  border: 0.5px solid #ddd;
+  border-radius: 6px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.glossary-close:hover {
+  background: #f0f0ed;
+}
+
+.glossary-item {
+  padding: 0.875rem 0;
+  border-bottom: 0.5px solid #f0f0ed;
+}
+
+.glossary-term {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.glossary-def {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+.glossary-link {
+  font-size: 11px;
+  color: #1D9E75;
+  text-decoration: none;
+}
+
+.glossary-link:hover {
+  text-decoration: underline;
+}
+
+a.hero-chip {
+  text-decoration: none;
+  color: #1D9E75;
+  background: #E1F5EE;
+}
+
+a.hero-chip:hover {
+  background: #9FE1CB;
+}
+
 .disclaimer {
   font-size: 11px;
   color: #aaa;
