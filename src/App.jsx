@@ -272,7 +272,7 @@ function App() {
       ])
 
       const wsData = await wsRes.json()
-      if (wsData.error) throw new Error('No water system found for this address.')
+      if (wsData.error) throw new Error('No water system found for "' + city + ', ' + state + '". This may be because your area is served by a regional water district not listed under your city name. Try searching for a nearby larger city, or visit EPA ECHO directly at echo.epa.gov to find your utility.')
       setAllSystems(wsData.allSystems || [])
 
       const [violRes, pfasRes] = await Promise.all([
@@ -841,6 +841,29 @@ function App() {
             <a href="https://www.epa.gov/dwucmr/fifth-unregulated-contaminant-monitoring-rule" target="_blank" rel="noreferrer" className="hero-chip">EPA UCMR 5</a>
             <a href="https://www.usgs.gov/special-topics/water-science-school/science/hardness-water" target="_blank" rel="noreferrer" className="hero-chip">USGS Water Data</a>
             <a href="https://www.epa.gov/enviro/envirofacts-data-service-api" target="_blank" rel="noreferrer" className="hero-chip">Envirofacts</a>
+          </div>
+          <div className="hero-instructions">
+            <div className="hero-instructions-title">How to search</div>
+            <p>Enter a full US street address including city and state for best results. For example:</p>
+            <div className="hero-example">123 Main St, Cincinnati, OH</div>
+            <div className="hero-instructions-notes">
+              <div className="hero-instructions-note">
+                <span className="hero-note-icon">✓</span>
+                <span>Include city and state — ZIP code alone may not return results</span>
+              </div>
+              <div className="hero-instructions-note">
+                <span className="hero-note-icon">✓</span>
+                <span>Use standard abbreviations for states (OH, KY, IL, CA)</span>
+              </div>
+              <div className="hero-instructions-note">
+                <span className="hero-note-icon">✗</span>
+                <span>PO Boxes and rural routes may not return results</span>
+              </div>
+              <div className="hero-instructions-note">
+                <span className="hero-note-icon">✗</span>
+                <span>Private wells and very small systems may not be in the database</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

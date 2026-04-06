@@ -891,6 +891,69 @@ a.hero-chip:hover {
   line-height: 1.5;
 }
 
+.hero-instructions {
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
+  border-top: 0.5px solid #e8e8e4;
+}
+
+.hero-instructions-title {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.hero-instructions p {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.hero-example {
+  font-family: monospace;
+  font-size: 13px;
+  background: #f0f0ed;
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.hero-instructions-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.hero-instructions-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.hero-note-icon {
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.hero-instructions-note:nth-child(-n+2) .hero-note-icon {
+  color: #1D9E75;
+}
+
+.hero-instructions-note:nth-child(n+3) .hero-note-icon {
+  color: #E24B4A;
+}
+
 /* DISCLAIMER */
 .disclaimer {
   font-size: 11px;
