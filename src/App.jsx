@@ -20,7 +20,7 @@ const PFAS_INFO = {
     fullName: 'Perfluorooctane sulfonic acid',
     epaLimit: '4 ppt',
     sources: 'Firefighting foam (AFFF), stain-resistant fabrics, food packaging, industrial processes near military bases',
-    healthEffects: 'Linked to kidney and testicular cancer, thyroid disease, immune system effects, and reproductive harm.',
+    healthEffects: 'Linked to kidney and testicular cancer, thyroid disease, imune system effects, and reproductive harm.',
     learnMoreUrl: 'https://www.epa.gov/sdwa/and-polyfluoroalkyl-substances-pfas',
   },
   'PFNA': {
@@ -748,19 +748,19 @@ function App() {
                   Look for a section titled "Unregulated Contaminants" or "UCMR 5 Results." PFAS compounds will be listed by their chemical names or abbreviations. The most common ones to look for are:
                 </p>
                 <ul className="ccr-tab-list">
-                  <li><strong>PFOA</strong> - perfluorooctanoic acid (EPA limit: 4 ppt)</li>
-                  <li><strong>PFOS</strong> - perfluorooctane sulfonic acid (EPA limit: 4 ppt)</li>
-                  <li><strong>PFNA</strong> - perfluorononanoic acid (EPA limit: 10 ppt)</li>
-                  <li><strong>PFHxS</strong> - perfluorohexane sulfonic acid (EPA limit: 10 ppt)</li>
-                  <li><strong>HFPO-DA</strong> - also known as GenX chemicals (EPA limit: 10 ppt)</li>
+                  <li><strong>PFOA</strong>: perfluorooctanoic acid (EPA limit: 4 ppt)</li>
+                  <li><strong>PFOS</strong>: perfluorooctane sulfonic acid (EPA limit: 4 ppt)</li>
+                  <li><strong>PFNA</strong>: perfluorononanoic acid (EPA limit: 10 ppt)</li>
+                  <li><strong>PFHxS</strong>: perfluorohexane sulfonic acid (EPA limit: 10 ppt)</li>
+                  <li><strong>HFPO-DA</strong>, also known as GenX chemicals (EPA limit: 10 ppt)</li>
                 </ul>
                 <p style={{fontSize:'13px', color:'#444', lineHeight:'1.6', marginTop:'0.75rem', marginBottom:'0.75rem'}}>
                   If your CCR does not mention PFAS, contact your utility directly and ask whether they participated in EPA UCMR 5 monitoring between 2023 and 2025.
                 </p>
                 <div className="rec-detail-heading" style={{marginTop:'0.75rem'}}>Other things to look for</div>
                 <ul className="ccr-tab-list">
-                  <li>Water hardness - your utility's actual reported hardness level</li>
-                  <li>Source water - where your drinking water comes from</li>
+                  <li>Water hardness: your utility's actual reported hardness level</li>
+                  <li>Source water: where your drinking water comes from</li>
                   <li>Any contaminants detected above EPA action levels</li>
                   <li>Violations or enforcement actions during the reporting year</li>
                 </ul>
@@ -794,7 +794,7 @@ function App() {
               </div>
               <div className="glossary-item">
                 <div className="glossary-term">Water Hardness</div>
-                <div className="glossary-def">Water hardness measures the concentration of dissolved calcium and magnesium minerals. Hard water is not a health risk, but it can cause scale buildup in pipes and appliances, reduce soap lathering efficiency, and leave deposits on fixtures. The USGS classifies water as soft (0-60 mg/L), moderately hard (61-120 mg/L), hard (121-180 mg/L), or very hard (over 180 mg/L).</div>
+                <div className="glossary-def">Water hardness measures the concentration of dissolved calcium and magnesium minerals. Hard water is not a health risk, but it can cause scale buildup in pipes and appliances, reduce soap lathering efficiency, and leave deposits on fixtures. The USGS classifies water as soft (0-60 mg/L), moderately hard (61-120 mg/L), hard (121-180 mg/L), or verry hard (over 180 mg/L).</div>
                 <a href="https://www.usgs.gov/special-topics/water-science-school/science/hardness-water" target="_blank" rel="noreferrer" className="glossary-link">USGS - Hardness of Water</a>
               </div>
               <div className="glossary-item">
