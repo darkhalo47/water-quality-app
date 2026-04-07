@@ -14,70 +14,70 @@ const PFAS_INFO = {
     epaLimit: '4 ppt',
     sources: 'Nonstick cookware, food packaging, stain-resistant materials, firefighting foam (AFFF)',
     healthEffects: 'Linked to kidney and testicular cancer, thyroid disease, immune system effects, and reproductive harm.',
-    learnMoreUrl: 'https://www.epa.gov/pfas/pfas-drinking-water-regulation',
+    learnMoreUrl: 'https://www.epa.gov/sdwa/and-polyfluoroalkyl-substances-pfas',
   },
   'PFOS': {
     fullName: 'Perfluorooctane sulfonic acid',
     epaLimit: '4 ppt',
     sources: 'Firefighting foam (AFFF), stain-resistant fabrics, food packaging, industrial processes near military bases',
     healthEffects: 'Linked to kidney and testicular cancer, thyroid disease, immune system effects, and reproductive harm.',
-    learnMoreUrl: 'https://www.epa.gov/pfas/pfas-drinking-water-regulation',
+    learnMoreUrl: 'https://www.epa.gov/sdwa/and-polyfluoroalkyl-substances-pfas',
   },
   'PFNA': {
     fullName: 'Perfluorononanoic acid',
     epaLimit: '10 ppt',
     sources: 'Fluoropolymer manufacturing, food packaging, stain-resistant coatings',
     healthEffects: 'Linked to immune system effects, thyroid hormone disruption, and developmental effects.',
-    learnMoreUrl: 'https://www.epa.gov/pfas/pfas-drinking-water-regulation',
+    learnMoreUrl: 'https://www.epa.gov/sdwa/and-polyfluoroalkyl-substances-pfas',
   },
   'PFHxS': {
     fullName: 'Perfluorohexane sulfonic acid',
     epaLimit: '10 ppt',
     sources: 'Firefighting foam, carpet treatments, food packaging',
     healthEffects: 'Linked to thyroid hormone disruption and immune system effects.',
-    learnMoreUrl: 'https://www.epa.gov/pfas/pfas-drinking-water-regulation',
+    learnMoreUrl: 'https://www.epa.gov/sdwa/and-polyfluoroalkyl-substances-pfas',
   },
   'HFPO-DA': {
     fullName: 'Hexafluoropropylene oxide dimer acid (GenX chemicals)',
     epaLimit: '10 ppt',
     sources: 'Fluoropolymer manufacturing, used as a replacement for PFOA',
     healthEffects: 'Linked to liver, kidney, and immune system effects in animal studies.',
-    learnMoreUrl: 'https://www.epa.gov/pfas/pfas-drinking-water-regulation',
+    learnMoreUrl: 'https://www.epa.gov/sdwa/and-polyfluoroalkyl-substances-pfas',
   },
   'PFBS': {
     fullName: 'Perfluorobutane sulfonic acid',
     epaLimit: 'No individual EPA limit (part of Hazard Index)',
     sources: 'Used as a replacement for PFOS in some applications, stain-resistant treatments',
     healthEffects: 'Limited data. May affect thyroid function. Part of EPA Hazard Index mixture standard.',
-    learnMoreUrl: 'https://www.epa.gov/pfas/pfas-drinking-water-regulation',
+    learnMoreUrl: 'https://www.epa.gov/sdwa/and-polyfluoroalkyl-substances-pfas',
   },
   'PFBA': {
     fullName: 'Perfluorobutanoic acid',
     epaLimit: 'No EPA limit currently set',
     sources: 'Used as a replacement for PFOA, food packaging, industrial processes',
     healthEffects: 'Limited data. Short-chain PFAS. EPA is still evaluating health effects.',
-    learnMoreUrl: 'https://www.epa.gov/pfas/pfas-drinking-water-regulation',
+    learnMoreUrl: 'https://www.epa.gov/sdwa/and-polyfluoroalkyl-substances-pfas',
   },
   'PFHxA': {
     fullName: 'Perfluorohexanoic acid',
     epaLimit: 'No EPA limit currently set',
     sources: 'Fluoropolymer manufacturing, food packaging',
     healthEffects: 'Limited data. EPA is still evaluating health effects.',
-    learnMoreUrl: 'https://www.epa.gov/pfas/pfas-drinking-water-regulation',
+    learnMoreUrl: 'https://www.epa.gov/sdwa/and-polyfluoroalkyl-substances-pfas',
   },
   'PFHpA': {
     fullName: 'Perfluoroheptanoic acid',
     epaLimit: 'No EPA limit currently set',
     sources: 'Industrial processes, fluoropolymer manufacturing',
     healthEffects: 'Limited data. EPA is still evaluating health effects.',
-    learnMoreUrl: 'https://www.epa.gov/pfas/pfas-drinking-water-regulation',
+    learnMoreUrl: 'https://www.epa.gov/sdwa/and-polyfluoroalkyl-substances-pfas',
   },
   'PFDA': {
     fullName: 'Perfluorodecanoic acid',
     epaLimit: 'No EPA limit currently set',
     sources: 'Fluoropolymer manufacturing, food packaging, stain-resistant treatments',
     healthEffects: 'Linked to liver and kidney effects in animal studies.',
-    learnMoreUrl: 'https://www.epa.gov/pfas/pfas-drinking-water-regulation',
+    learnMoreUrl: 'https://www.epa.gov/sdwa/and-polyfluoroalkyl-substances-pfas',
   },
 }
 
@@ -790,7 +790,7 @@ function App() {
               <div className="glossary-item">
                 <div className="glossary-term">PFAS Contaminants</div>
                 <div className="glossary-def">Per- and polyfluoroalkyl substances (PFAS) are a group of thousands of synthetic chemicals used in manufacturing since the 1940s. They are called "forever chemicals" because they do not break down in the environment or the human body. In April 2024, the EPA finalized the first national drinking water standards for six PFAS, setting limits as low as 4 parts per trillion (ppt) for PFOA and PFOS.</div>
-                <a href="https://www.epa.gov/pfas/pfas-drinking-water-regulation" target="_blank" rel="noreferrer" className="glossary-link">EPA - PFAS Drinking Water Regulation</a>
+                <a href="https://www.epa.gov/sdwa/and-polyfluoroalkyl-substances-pfas" target="_blank" rel="noreferrer" className="glossary-link">EPA - PFAS Drinking Water Regulation</a>
               </div>
               <div className="glossary-item">
                 <div className="glossary-term">Water Hardness</div>
